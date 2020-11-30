@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Ranchers&display=swap" rel="stylesheet">
+  <!-- async=false defer=false -->
+  <!-- <script src="./node_modules/babylonjs/babylon.js"></script> -->
+  <!-- <script src="https://cdn.babylonjs.com/babylon.js"></script> -->
+  <script src="https://preview.babylonjs.com/babylon.js"></script>
+  <!-- <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script> -->
+  <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+  <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+  <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+  <!-- <script async=false defer=false src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/babylonjs/4.1.0/babylon.js" integrity="sha256-IRmCyNooC7H6r9t99bFifu2ZizjqB0bO7owJTipmSZA=" crossorigin="anonymous"></script> -->
+
+  <script src="./bundle.js"></script>
+  <script>
+    let context;
+
+    function init() {
+      console.log("init app");
+
+      let url = window.location.href;
+
+      context = new pixarAR.PixarARContext(url);
+      context.initialize();
+    }
+
+  </script>
+</head>
+
+<body onload="init()" style="background-color:#D4D4D4;margin:0px;">
+  <div id="inspector">
+    <div id="app">
+      <video loop autoplay muted playsinline id="video">
+      </video>
+      <canvas id="canvas"></canvas>
+      <div id="gui" class="container-1">
+        <div class="box box-1">
+          <a id="homeButton" class="redButton noselect">Home</a>
+          <p id="infoText" class="textStyle noselect">Best used in camera portrait mode</p>
+        </div>
+        <div class="box box-2">
+          <p id="loadingTextfield" class="loading noselect">Loading</a>
+        </div>
+        <div class="box box-3">
+          <p id="textTest" class="textStyle noselect">Here is a link to the site. Thank you for your time! See you on Tuesday!</p>
+          <a id="danceButton" class="redButton noselect">Dance</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

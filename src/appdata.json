@@ -1,0 +1,35 @@
+{
+    "name": "PixarAR",
+    "assetURL": "resources/",
+    "workerURL": "./resources/jsartoolkit5/artoolkit/artoolkit.wasm_worker.js",
+    "sounds": [
+        {
+            "id": "Hoowdy",
+            "file": "resources/data/sounds/mynameiswoody.wav"
+        }
+    ],
+    "characters": [
+        {
+            "id": "woody",
+            "modelURL": "resources/data/woody/",
+            "file": "woody-animated.glb",
+            "name": "Woody",
+            "scale": 150,
+            "animations": [
+                {
+                    "type": "idle",
+                    "modelURL": "resources/data/woody/",
+                    "file": "woody-idle0-b.glb"
+                }
+            ],
+            "markerData": {
+                "width": 1637,
+                "height": 2048,
+                "dpi": 600,
+                "url": "../../data/woody/woody",
+                "offsetX": 0,
+                "offsetY": 0
+            }
+        }
+    ]
+}

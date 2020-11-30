@@ -1,0 +1,32 @@
+{
+  "name": "woodyar-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "rollup -c && tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babylonjs/core": "^4.2.0",
+    "@babylonjs/loaders": "^4.2.0",
+    "@types/node": "^14.14.8",
+    "babylonjs-materials": "^4.2.0",
+    "rollup-plugin-external-globals": "^0.6.1",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "@babylonjs/materials": "^4.2.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
+    "babylonjs": "^4.2.0",
+    "babylonjs-loaders": "^4.2.0",
+    "rollup": "^2.33.3",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}
