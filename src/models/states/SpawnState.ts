@@ -2,10 +2,6 @@ import { IState } from "app/framework/StateMachine";
 import { AnimationControllerComponent } from "../components/AnimationControllerComponent";
 import { ModelRendererComponent } from "../components/ModelRendererComponent";
 import { StateMachineComponent } from "../components/StateMachineComponent";
-import { IdleState } from "./IdleState";
-import * as BABYLON from 'babylonjs';
-import { AudioControllerComponent } from "../components/AudioControllerComponent";
-import { AudioManager } from "app/framework/AudioManager";
 import { WaveState } from "./WaveState";
 
 export class SpawnState implements IState {

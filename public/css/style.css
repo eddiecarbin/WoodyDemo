@@ -90,7 +90,7 @@ body {
 .box {
   text-align: center;
   color: white;
-  font-family: 'Ranchers', cursive;
+  font-family: 'Anton', sans-serif;
   /* font-size: 36px; */
   padding: 20px;
   text-shadow: 4px 4px 2px #2C130C;
@@ -114,16 +114,16 @@ body {
 }
 
 .textStyle {
-  font-family: 'Ranchers', cursive;
-  text-shadow: 4px 4px 0px #2C130C;
+  font-family: 'Anton', sans-serif;
+  text-shadow: 4px 4px 0px #181311;
 	font-size:3em;
   letter-spacing: 2px;
   word-spacing: 1.4px;
-  -webkit-text-stroke: 2px black;
+  -webkit-text-stroke: 1px rgb(102, 102, 102);
 }
 
 .redButton {
-  font-family: 'Ranchers', cursive;
+  font-family: 'Anton', sans-serif;
 	box-shadow:inset 0px 4px 0px 0px #f5978e;
 	background:linear-gradient(to bottom, #f24537 5%, #c62d1f 100%);
 	background-color:#f24537;
@@ -162,7 +162,9 @@ body {
         
 .loading{
   color: white;
-  font: 300 4em/150% Impact;
+  font-family: 'Anton', sans-serif;
+
+  font: 300 5em/150%;
   text-align: center;
 }
 

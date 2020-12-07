@@ -3,15 +3,19 @@ import { ITicked } from "../framework/TimeManager";
 import { CharacterModelData, GameEvents, MarkerData } from "./AppData";
 import { Entity } from "../framework/entity/Entity";
 import { Model } from "../framework/Model";
-import * as BABYLON from 'babylonjs';
 
 import { CharacterEntity } from "./CharacterEntity";
-import { Matrix } from "babylonjs";
 import { ARControllerComponent } from "./components/ARControllerComponent";
 import { PixarARContext } from "app/PixarARContext";
 import { StateMachineComponent } from "./components/StateMachineComponent";
 import { DanceState } from "./states/DanceState";
 import { SpawnState } from "./states/SpawnState";
+import { Scene } from "@babylonjs/core/scene";
+import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
+import { TransformNode } from "@babylonjs/core/Meshes/transformNode";
+import { Matrix, Quaternion, Vector3 } from "@babylonjs/core/Maths/math";
+import { Camera } from "@babylonjs/core/Cameras/camera";
+
 export class ARWorkerController extends Model implements ITicked {
 
     static LOADED_EVENT: string = "ARWorker_LOADED_EVENT";
@@ -36,9 +40,9 @@ export class ARWorkerController extends Model implements ITicked {
     
     private world: any;
 
-    private camera: BABYLON.Camera;
+    private camera: Camera;
 
-    private root: BABYLON.AbstractMesh;
+    private root: AbstractMesh;
 
     private markerData: MarkerData;
 
@@ -46,7 +50,7 @@ export class ARWorkerController extends Model implements ITicked {
 
     private _hasFound: boolean = false;
 
-    private _lastTranslation: BABYLON.Vector3;
+    private _lastTranslation: Vector3;
 
     private _deltaAccuracy: number = 10;
 
@@ -69,14 +73,14 @@ export class ARWorkerController extends Model implements ITicked {
     }
     public _entities: Entity[] = [];
 
-    constructor(camera: BABYLON.Camera, input_width: number, input_height: number) {
+    constructor(camera: Camera, input_width: number, input_height: number) {
         super();
         this.camera = camera;
         this.vw = input_width;
         this.vh = input_height;
     }
 
-    public getRoot(): BABYLON.AbstractMesh {
+    public getRoot(): AbstractMesh {
         return this.root;
     }
 
@@ -88,9 +92,9 @@ export class ARWorkerController extends Model implements ITicked {
     }
 
     public initialize(data: CharacterModelData, context: PixarARContext): Promise<boolean> {
-        let scene: BABYLON.Scene = context.sceneRenderer.scene;
+        let scene: Scene = context.sceneRenderer.scene;
 
-        this.root = new BABYLON.AbstractMesh("root-" + data.id, scene);
+        this.root = new AbstractMesh("root-" + data.id, scene);
         context.eventDispatcher.addEventListener(GameEvents.DANCE, () => {
             this.makeDance();
         });
@@ -99,7 +103,7 @@ export class ARWorkerController extends Model implements ITicked {
             await CharacterFactoryBabylon.createCharacterEntity(data, context).then((enity) => {
                 this._entities.push(enity);
 
-                let _modelRoot: BABYLON.TransformNode = (enity as CharacterEntity).getModelRoot();
+                let _modelRoot: AbstractMesh = (enity as CharacterEntity).getModelRoot();
                 _modelRoot.setParent(this.root);
                 this.worker = new Worker('./resources/jsartoolkit5/artoolkit/artoolkit.wasm_worker.js');
                 this.worker.onmessage = async (ev) => {
@@ -163,12 +167,12 @@ export class ARWorkerController extends Model implements ITicked {
                             // console.log(msg.proj);
                             // console.log(proj);
                             // console.log(this.getArrayMatrix(proj));
-                            let matrix: BABYLON.Matrix = BABYLON.Matrix.FromArray(this.getArrayMatrix(proj));
+                            let matrix: Matrix = Matrix.FromArray(this.getArrayMatrix(proj));
 
-                            let pos = BABYLON.Vector3.TransformCoordinates(new BABYLON.Vector3(0, 0, 0), matrix);
+                            let pos = Vector3.TransformCoordinates(new Vector3(0, 0, 0), matrix);
 
-                            let rotMatrix: BABYLON.Matrix = matrix.getRotationMatrix();
-                            let rotation: BABYLON.Quaternion = new BABYLON.Quaternion().fromRotationMatrix(rotMatrix);
+                            let rotMatrix: Matrix = matrix.getRotationMatrix();
+                            let rotation: Quaternion = new Quaternion().fromRotationMatrix(rotMatrix);
                             // console.log(rotation);
                             // console.log(rotation.toEulerAngles());
                             // console.log("rotation");
@@ -183,7 +187,7 @@ export class ARWorkerController extends Model implements ITicked {
                             // this.camera.maxZ = 5000;
                             // this.camera.minZ = .1;
                             this.camera.fov = 1;
-                            this.camera.fovMode = BABYLON.Camera.PERSPECTIVE_CAMERA;
+                            this.camera.fovMode = Camera.PERSPECTIVE_CAMERA;
 
                             // this.camera.maxZ = -5000;
                             ARWorkerController.IsCameraSet = true;
@@ -238,7 +242,7 @@ export class ARWorkerController extends Model implements ITicked {
             arComponent.foundPattern(false);
             this.root.setEnabled(false);
         } else {
-            let worldMatrix: BABYLON.Matrix = BABYLON.Matrix.FromArray(this.getArrayMatrix(this.world));
+            let worldMatrix: Matrix = Matrix.FromArray(this.getArrayMatrix(this.world));
 
             arComponent.foundPattern(true);
             // console.log("------------------------- Matrix found ----------------------------");
@@ -254,9 +258,9 @@ export class ARWorkerController extends Model implements ITicked {
                 this._lastTranslation = worldMatrix.getTranslation();
             }
             else {
-                let _currentTranslation: BABYLON.Vector3 = worldMatrix.getTranslation();
+                let _currentTranslation: Vector3 = worldMatrix.getTranslation();
 
-                if (Math.abs(BABYLON.Vector3.Distance(_currentTranslation, this._lastTranslation)) > this._deltaAccuracy) {
+                if (Math.abs(Vector3.Distance(_currentTranslation, this._lastTranslation)) > this._deltaAccuracy) {
                     // console.log(Math.abs(BABYLON.Vector3.Distance(_currentTranslation, this._lastTranslation)))
                     // console.log("frame drop");
                     this._frameDrops += 1;
@@ -275,18 +279,18 @@ export class ARWorkerController extends Model implements ITicked {
             // console.log(this.root.matrix);
             // this.root.matrixAutoUpdate = false;
             // console.log("matrix0", this.trackedMatrix.interpolated.toString());
-            let matrix: BABYLON.Matrix = BABYLON.Matrix.FromArray(this.getArrayMatrix(this.trackedMatrix.interpolated));
+            let matrix: Matrix = Matrix.FromArray(this.getArrayMatrix(this.trackedMatrix.interpolated));
             // console.log("matrix1", matrix.toArray().toString());
             // this.root.setPivotMatrix(matrix);
             // this.root.freezeWorldMatrix(matrix);
             // this.root.getWorldMatrix().invertToRef(matrix);
 
-            let rotMatrix: BABYLON.Matrix = matrix.getRotationMatrix();
-            let rotation: BABYLON.Quaternion = new BABYLON.Quaternion().fromRotationMatrix(rotMatrix);
+            let rotMatrix: Matrix = matrix.getRotationMatrix();
+            let rotation: Quaternion = new Quaternion().fromRotationMatrix(rotMatrix);
             this.root.rotation = rotation.toEulerAngles();
             // this.root.rotationQuaternion = rotation.fromRotationMatrix(rotMatrix);
 
-            let pos = BABYLON.Vector3.TransformCoordinates(new BABYLON.Vector3(0, 0, 0), matrix);
+            let pos = Vector3.TransformCoordinates(new Vector3(0, 0, 0), matrix);
 
             // console.log("camera position: " + pos);
 

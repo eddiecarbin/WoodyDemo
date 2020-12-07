@@ -4,7 +4,6 @@ import { GameEvents } from "../AppData";
 import { AnimationControllerComponent } from "../components/AnimationControllerComponent";
 import { ModelRendererComponent } from "../components/ModelRendererComponent";
 import { StateMachineComponent } from "../components/StateMachineComponent";
-import { IdleState } from "./IdleState";
 
 export class DoNothingState extends State {
 

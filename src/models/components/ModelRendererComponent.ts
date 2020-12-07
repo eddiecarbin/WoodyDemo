@@ -1,43 +1,38 @@
-// import * as THREE from "THREE"
 import { EntityComponent } from "../../framework/entity/EntityComponent";
-import * as BABYLON from 'babylonjs';
 import { CharacterModelData } from "../AppData";
-import { Vector3 } from "babylonjs";
 import { degreesToRadians } from "app/framework/Utils";
+import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
+import { Color3, Color4, Vector3 } from "@babylonjs/core/Maths/math";
+import { Mesh } from "@babylonjs/core/Meshes/mesh";
+import { Scene } from "@babylonjs/core/scene";
+import "@babylonjs/core/Meshes/meshBuilder"
+import "@babylonjs/core/Materials/standardMaterial";
 
 export class ModelRendererComponent extends EntityComponent {
 
     static NAME: string = "ModelRendererComponent";
 
-    public model: BABYLON.AbstractMesh;
+    public model: AbstractMesh;
 
-    public root: BABYLON.AbstractMesh;
+    public root: AbstractMesh;
 
-    // private testCube: THREE.Mesh;
     private data: CharacterModelData;
 
-    constructor(model: BABYLON.AbstractMesh, d: CharacterModelData) {
+    constructor(model: AbstractMesh, d: CharacterModelData, scene : Scene) {
         super(ModelRendererComponent.NAME);
 
         this.data = d;
 
-        this.root = new BABYLON.AbstractMesh("model-root");
-        // this.root.matrixAutoUpdate = false;
-
+        this.root = new AbstractMesh("model-root");
+        // this.root = Mesh.CreateBox("model-root",1, scene);
+        this.root.receiveShadows = true;
         this.model = model;
         let scale: number = this.data.scale;
-        this.model.scaling.set(scale, scale, scale);
-        this.model.position.set(150, 150, 0);
+        this.root.scaling.set(scale, scale, scale);
+        this.root.position.set(150, 150, 0);
 
-        this.model.rotate(BABYLON.Vector3.Left(), degreesToRadians(-90));
-        // var geometry = new THREE.BoxGeometry(80, 80, 80);
-        // var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        // this.testCube = new THREE.Mesh(geometry, material);
-        // this.testCube.position.set(100, 100, 0);
-        // this.model = this.testCube;
+        this.model.rotate(Vector3.Left(), degreesToRadians(-90));
         this.model.parent = this.root;
-        // this.root.add(this.model);
-        // model.add(this.testCube);
     }
 
     public set enabled(value: boolean) {
@@ -45,9 +40,6 @@ export class ModelRendererComponent extends EntityComponent {
         this.root.setEnabled(value);
     }
 
-    // public setEnabled(value: boolean): void {
-    //     this.root.setEnabled(value);
-    // }
 }
 
 export interface IModelRendererComponent {

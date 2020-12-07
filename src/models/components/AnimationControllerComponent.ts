@@ -1,6 +1,9 @@
 import { EntityComponent } from "app/framework/entity/EntityComponent";
 import { AnimationData } from "../AppData";
-import * as BABYLON from 'babylonjs';
+import { Skeleton } from "@babylonjs/core/Bones";
+import { Scene } from "@babylonjs/core/scene";
+import { AnimationGroup } from "@babylonjs/core/Animations/animationGroup";
+import { Animatable } from "@babylonjs/core/Animations/animatable";
 
 export class AnimationControllerComponent extends EntityComponent {
 
@@ -10,11 +13,12 @@ export class AnimationControllerComponent extends EntityComponent {
 
     private _animationDataDictionary: any;
 
-    private _skeleton: BABYLON.Skeleton;
+    private _skeleton: Skeleton;
 
-    private _scene: BABYLON.Scene;
+    private _scene: Scene;
 
-    constructor(scene: BABYLON.Scene, skeleton: BABYLON.Skeleton) {
+    constructor(scene: Scene, skeleton: Skeleton
+        ) {
         super(AnimationControllerComponent.NAME);
         this._skeleton = skeleton;
         this._scene = scene;
@@ -30,7 +34,7 @@ export class AnimationControllerComponent extends EntityComponent {
     }
 
     public playAnimationAsync(name: string, loop: boolean = false, speed: number = 1): Promise<boolean> {
-        var group: BABYLON.AnimationGroup = this._scene.getAnimationGroupByName(name);
+        var group: AnimationGroup = this._scene.getAnimationGroupByName(name);
         return new Promise<boolean>((resolve, rejects)=>{
             group.start(loop, 1.0, group.from, group.to, false).onAnimationEndObservable.add((eventData, eventState)=>{
                 resolve(true);
@@ -38,7 +42,7 @@ export class AnimationControllerComponent extends EntityComponent {
         });
     }
 
-    public playAnimationNumber(id: number, loop: boolean = false): BABYLON.AnimationGroup {
+    public playAnimationNumber(id: number, loop: boolean = false): AnimationGroup {
 
 
 
@@ -48,7 +52,6 @@ export class AnimationControllerComponent extends EntityComponent {
         return;
         // let anim: BABYLON.Animatable = this._scene.beginAnimation(this._skeleton, 10, 900, true, 1);
         console.log(this._scene.animationGroups.length);
-        return this._scene.animationGroups[id].play(loop);
         // this._scene.beginAnimation(this._skeleton, 0, 100, true, 1.0);
         // return null; //this._scene.animationGroups[id].play(loop);
     }
@@ -58,8 +61,8 @@ export class AnimationControllerComponent extends EntityComponent {
         this._scene.animationGroups[1].play(false);
         console.log("plainy animation")
 
-        var standRange: BABYLON.AnimationGroup = this._scene.getAnimationGroupByName("stand");
-        let anim: BABYLON.Animatable = this._scene.beginAnimation(this._skeleton, 10, 800, true, 0.8);
+        var standRange: AnimationGroup = this._scene.getAnimationGroupByName("stand");
+        let anim: Animatable = this._scene.beginAnimation(this._skeleton, 10, 800, true, 0.8);
 
         anim.waitAsync()
 
@@ -77,7 +80,7 @@ export class AnimationControllerComponent extends EntityComponent {
     }
 
     public stopAnimation(name:string): void {
-        var group: BABYLON.AnimationGroup = this._scene.getAnimationGroupByName(name);
+        var group: AnimationGroup = this._scene.getAnimationGroupByName(name);
         group.stop();
         // group.reset();
     }

@@ -7,19 +7,22 @@
   <link rel="stylesheet" type="text/css" href="./css/style.css">
 
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Ranchers&display=swap" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Ranchers&display=swap" rel="stylesheet"> -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
   <!-- async=false defer=false -->
-  <!-- <script src="./node_modules/babylonjs/babylon.js"></script> -->
   <!-- <script src="https://cdn.babylonjs.com/babylon.js"></script> -->
-  <script src="https://preview.babylonjs.com/babylon.js"></script>
-  <!-- <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script> -->
-  <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-  <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
-  <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+  <!-- <script src="https://preview.babylonjs.com/babylon.js"></script> -->
+  <!-- <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script> -->
+  <!-- <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script> -->
+  <!-- <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script> -->
   <!-- <script async=false defer=false src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script> -->
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/babylonjs/4.1.0/babylon.js" integrity="sha256-IRmCyNooC7H6r9t99bFifu2ZizjqB0bO7owJTipmSZA=" crossorigin="anonymous"></script> -->
-
-  <script src="./bundle.js"></script>
+  <!-- <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script> -->
+  <!-- <script type="module" src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script> -->
+  
+  <!-- <script crossorigin src="..."></script> -->
+  <script type="module" src="./bundle.js"></script>
   <script>
     let context;
 
@@ -29,7 +32,12 @@
       let url = window.location.href;
 
       context = new pixarAR.PixarARContext(url);
-      context.initialize();
+      context.initialize().then(() => {
+        // context.getScene().debugLayer.show({
+        //   overlay: true,
+        //   globalRoot: document.getElementById('inspector')
+        // });
+      });
     }
 
   </script>
@@ -50,7 +58,8 @@
           <p id="loadingTextfield" class="loading noselect">Loading</a>
         </div>
         <div class="box box-3">
-          <p id="textTest" class="textStyle noselect">Here is a link to the site. Thank you for your time! See you on Tuesday!</p>
+          <p id="textTest" class="textStyle noselect">Here is a link to the site. Thank you for your time! See you on
+            Tuesday!</p>
           <a id="danceButton" class="redButton noselect">Dance</a>
         </div>
       </div>

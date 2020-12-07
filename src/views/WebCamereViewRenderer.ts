@@ -33,7 +33,14 @@ export class WebCameraViewRenderer {
                     this.video.srcObject = stream;
                     this.video = await new Promise<HTMLVideoElement>((resolve, reject) => {
                         this.video.onloadedmetadata = () => resolve(this.video);
-                    })
+                    }).then((value) => {
+                        resolve(true);
+                        return value;
+                    }).catch((msg) => {
+                        console.log(msg);
+                        reject(msg);
+                        return null;
+                    });
                     // console.log('video', this.video, this.video.videoWidth, this.video.videoHeight);
                     // this.video.play();
                 }).catch((error) => {
@@ -41,7 +48,6 @@ export class WebCameraViewRenderer {
                     reject(error);
                 });
 
-                resolve(true);
             }
             else {
                 reject("No navigator.mediaDevices && navigator.mediaDevices.getUserMedia");

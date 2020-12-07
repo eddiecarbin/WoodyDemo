@@ -8,6 +8,7 @@ import { Scene3DRendererBabylon } from "./views/Scene3DRendererBabylon";
 import { URLHelper } from "./utils/net/URLHelper";
 import { GUIViewMediator } from "./views/GUIViewMediator";
 import { AudioManager } from "./framework/AudioManager";
+import { Scene } from "@babylonjs/core/scene";
 
 
 //D:\3lbs\projects\Insecta\playpen\kalwalt-interactivity-AR
@@ -62,17 +63,19 @@ export class PixarARContext {
 
         await wait(100);
         this.startGame();
+        await wait(100);
 
         return Promise.resolve(true);
     }
 
+    public getScene () : Scene{
+        return this.sceneRenderer.scene;
+    }
+
     public startGame(): void {
         console.log("start pixar ar");
-
         this.timeManager.initialize();
-
         this.GUIViewMediator.hideLoading();
-        // this.sceneRenderer.displayInsepctor();
     }
 
 }

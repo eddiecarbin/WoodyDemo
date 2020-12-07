@@ -1,15 +1,18 @@
 
 import { ITicked } from "../framework/TimeManager";
 
-// import * as BABYLON from 'babylonjs';
-// import * as MATERIALS from "babylonjs-materials";
-// import 'babylonjs-materials';
-import { SkyMaterial } from '@babylonjs/materials/sky/SkyMaterial';
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { Scene } from "@babylonjs/core/scene";
 import { Camera } from "@babylonjs/core/Cameras/camera";
 import { ShadowGenerator } from "@babylonjs/core/Lights/Shadows/shadowGenerator";
-import { IShadowLight } from "@babylonjs/core/Lights/shadowLight";
+import { IShadowLight, DirectionalLight, HemisphericLight } from "@babylonjs/core/Lights";
+import { Color3, Color4, Vector3 } from "@babylonjs/core/Maths/math";
+import "@babylonjs/core/Meshes/meshBuilder"
+import "@babylonjs/core/Materials/standardMaterial";
+import { Mesh } from "@babylonjs/core/Meshes/mesh";
+// import "@babylonjs/core/Debug/debugLayer";
+// import "@babylonjs/inspector";
+
 
 export class Scene3DRendererBabylon implements ITicked {
 
@@ -19,7 +22,7 @@ export class Scene3DRendererBabylon implements ITicked {
     public scene: Scene;
     public camera: Camera;
     public light: IShadowLight;
-    public shadowGenerator : ShadowGenerator;
+    public shadowGenerator: ShadowGenerator;
     // private material : BABYLON.GridMaterial;
 
     private worker: Worker;
@@ -47,61 +50,46 @@ export class Scene3DRendererBabylon implements ITicked {
                 stencil: true
             });
 
-            this.scene = new BABYLON.Scene(this.engine);
-            this.scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
-            this.scene.ambientColor = new BABYLON.Color3(1, 1, 1);
+            this.scene = new Scene(this.engine);
+            this.scene.clearColor = new Color4(0, 0, 0, 0);
+            this.scene.ambientColor = new Color3(1, 1, 1);
             this.scene.useRightHandedSystem = true;
 
-            this.camera = new BABYLON.Camera('camera1', new BABYLON.Vector3(0, 0, 0), this.scene);
+            this.camera = new Camera('camera1', new Vector3(0, 0, 0), this.scene);
 
             console.log("createing sky material");
             // var myMaterial = new BABYLON.StandardMaterial("myMaterial", this.scene);
-            let skyMaterial = new SkyMaterial("skyMaterial", null);
+            // let skyMaterial = new SkyMaterial("skyMaterial", null);
 
             // console.log("THE MATERIAL: " + skyMaterial);
             //this.camera.maxZ = 5000;
             // this.camera.minZ = .1;
             // this.camera.fov = 3;
             // this.light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), this.scene);
-            this.light = new BABYLON.DirectionalLight('light', new BABYLON.Vector3(0, 1, -1), this.scene);
-            this.light.position.y=8;
-            this.light.position.z=2;
+            this.light = new DirectionalLight('light', new Vector3(0, -10, -20), this.scene);
+            this.light.position.y = 100;
+            this.light.position.z = -250;
             this.light.intensity = 2;
-            // this.light.intensity = 0.5
-            this.shadowGenerator = new BABYLON.ShadowGenerator(1024, this.light)
-            this.shadowGenerator.useBlurExponentialShadowMap = true;
-            this.shadowGenerator.blurScale = 2;
-            this.shadowGenerator.setDarkness(1);
+            this.shadowGenerator = new ShadowGenerator(1024, this.light)
+            // this.shadowGenerator.useBlurExponentialShadowMap = true;
+            // this.shadowGenerator.blurScale = 2;
+            this.shadowGenerator.setDarkness(0.3);
+            // let sphear = Mesh.CreateBox("lightsphear",20, this.scene);
+            // sphear.position = this.light.position;
 
-
-            this.camera.fovMode = BABYLON.Camera.FOVMODE_VERTICAL_FIXED;
-            // console.log("clipPlane:",this.scene.clipPlane);
-            // Add a camera to the scene and attach it to the canvas
-            // this.camera = new BABYLON.ArcRotateCamera(
-            //     "Camera",
-            //     Math.PI / 2,
-            //     Math.PI / 2,
-            //     2,
-            //     BABYLON.Vector3.Zero(),
-            //     this.scene
-            // );
-
+            this.camera.fovMode = Camera.FOVMODE_VERTICAL_FIXED;
+           
 
             this.camera.attachControl(this.canvas_draw, true);
-            // This is where you create and manipulate meshes
-            // create a basic light, aiming 0,1,0 - meaning, to the sky
 
+
+            var light2 = new HemisphericLight("HemiLight", new Vector3(0, 1, 0), this.scene);
+            light2.intensity = 0.3;
             resolve(true);
 
         });
     }
 
-    public displayInsepctor(): void {
-        this.scene.debugLayer.show({
-            overlay: true,
-            globalRoot: document.getElementById('inspector')
-        });
-    }
     public update(): void {
         this.scene.render();
     }

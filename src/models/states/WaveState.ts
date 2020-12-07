@@ -3,7 +3,6 @@ import { AnimationControllerComponent } from "../components/AnimationControllerC
 import { ModelRendererComponent } from "../components/ModelRendererComponent";
 import { StateMachineComponent } from "../components/StateMachineComponent";
 import { IdleState } from "./IdleState";
-import * as BABYLON from 'babylonjs';
 import { AudioManager } from "app/framework/AudioManager";
 
 export class WaveState implements IState {

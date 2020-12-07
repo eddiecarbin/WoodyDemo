@@ -1,11 +1,14 @@
+import { Mesh } from "@babylonjs/core/Meshes/mesh";
+import { Scene } from "@babylonjs/core/scene";
+import { ShadowOnlyMaterial } from "@babylonjs/materials/shadowOnly";
 import { ITicked } from "../framework/TimeManager";
 import { PixarARContext } from "../PixarARContext";
 import { AppJson, CharacterModelData } from "./AppData";
 import { ARWorkerController } from "./ARWorkerController";
-import * as BABYLON from 'babylonjs';
-// import 'babylonjs-materials';
-// import { ShadowOnlyMaterial } from "babylonjs-materials";
-
+import "@babylonjs/core/Meshes/Builders/planeBuilder";
+import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
+import "@babylonjs/core/Meshes/meshBuilder"
+import "@babylonjs/core/Materials/standardMaterial";
 export class ARWorkerGroup implements ITicked {
 
     private _controllers: Map<string, ARWorkerController> = new Map<string, ARWorkerController>();
@@ -31,7 +34,7 @@ export class ARWorkerGroup implements ITicked {
     private ox: number;
     private oy: number;
 
-    private _groundPlane: BABYLON.Mesh;
+    private _groundPlane: Mesh;
 
     constructor(context: PixarARContext) {
         this._context = context;
@@ -64,14 +67,14 @@ export class ARWorkerGroup implements ITicked {
         this.canvas_process.height = this.ph;
         return new Promise<boolean>(async (resolve, reject) => {
 
-            let _scene: BABYLON.Scene = this._context.sceneRenderer.scene;
+            let _scene: Scene = this._context.sceneRenderer.scene;
 
-            // this._groundPlane = BABYLON.Mesh.CreatePlane('ground', 500, _scene);
-            // this._groundPlane.position.set(150, 150, -10);
-            // this._groundPlane.flipFaces(true);
-            // this._groundPlane.rotation.x = Math.PI / 2
-            // this._groundPlane.material = new BABYLON.ShadowOnlyMaterial('shadowOnly', _scene)
-            // this._groundPlane.RECEIVESHADOWS = true;
+            this._groundPlane = Mesh.CreatePlane('ground', 800, _scene);
+            this._groundPlane.position.set(150, 150, -10);
+            this._groundPlane.rotation.x = Math.PI;
+            this._groundPlane.material = new ShadowOnlyMaterial('shadowOnly', _scene);
+            // this._groundPlane.material = new StandardMaterial("standMat", _scene);
+            this._groundPlane.receiveShadows = true;
 
             //https://www.taniarascia.com/promise-all-with-async-await/
             Promise.all(
@@ -81,7 +84,7 @@ export class ARWorkerGroup implements ITicked {
 
                     await controller.initialize(insect, this._context);
 
-                    // this._groundPlane.parent = controller.getRoot();
+                    this._groundPlane.parent = controller.getRoot();
                     this._controllers.set(insect.id, controller);
                 })
             ).then(() => {
